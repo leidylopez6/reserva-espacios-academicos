@@ -103,4 +103,5 @@ Cumplir esta definición permite que el equipo distinga entre una funcionalidad 
 
 ---
 
-**Navegación del proyecto:** [01. Análisis de requisitos](requisitos.md) · [03. Diseño](diseño.md)
+**Navegación del proyecto:** 
+[Introduccion](README.md) ·[01. Análisis de requisitos](requisitos.md) · [02. Planeación ágil](planeacion.md) · [03. Diseño](diseño.md) · [04. Pruebas](pruebas.md)
