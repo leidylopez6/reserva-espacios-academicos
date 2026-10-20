@@ -108,3 +108,5 @@ Se toma como referencia una reserva existente con estos datos:
 | Misma sala, 10:00–11:00, si la reserva existente está cancelada | Sí | `201` | Las reservas canceladas no bloquean el espacio. |
 
 **Importante:** los códigos HTTP indicados corresponden al resultado esperado de una creación de reserva. Si la operación consiste en editar una reserva, el código de respuesta exitosa puede ser `200 OK`, según lo definido para esa ruta de la API.
+
+**Navegación del proyecto:** [01. Análisis de requisitos](requisitos.md) · [03. Diseño](diseño.md)
