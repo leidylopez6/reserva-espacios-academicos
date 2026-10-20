@@ -1,4 +1,4 @@
-# 2. Planeación ágil (Scrum simplificado)
+# 2. Planeación ágil
 
 
 ## 2.1 Roles del equipo
@@ -69,14 +69,32 @@ El tablero Kanban permite organizar el trabajo según el estado de cada tarea. C
 
 El siguiente tablero corresponde a la planificación inicial del Sprint 1. El Scrum Master debe actualizarlo durante la semana, utilizando GitHub Projects, Trello o este mismo README.
 
-| Por hacer | En progreso | Hecho |
+## 4. Tablero Kanban (estado final del Sprint 1)
+
+El tablero Kanban permite organizar el trabajo según el estado de cada tarea. Cada historia de usuario o tarea se representa como una tarjeta y se mueve entre las columnas a medida que avanza el desarrollo.
+
+El siguiente tablero presenta el estado final del Sprint 1, suponiendo que el equipo completó las actividades de planificación, desarrollo inicial y documentación de la API. El Scrum Master es responsable de mantener actualizado el tablero durante el desarrollo del proyecto.
+
+| **Por hacer** | **En progreso** | **Hecho** |
 |---|---|---|
-| S1-1: Crear el proyecto Express y la estructura de carpetas. | Vacío al iniciar el sprint. | Etapa 1: Análisis de requisitos (`requisitos.md`). |
-| S1-2: Preparar los datos de ejemplo en `/data`. | | Etapa 2: Planeación ágil. |
-| S1-3: Desarrollar `GET /espacios` y `GET /espacios/:id`. | | Etapa 3: Diseño (`diseño.md`). |
-| S1-4: Desarrollar `POST /espacios`. | | |
-| S1-5: Desarrollar `GET /reservas` y `GET /reservas/:id`. | | |
-| S1-6: Desarrollar `POST /reservas`. | | |
+| Sin tareas pendientes al finalizar el sprint. | Sin tareas en desarrollo al finalizar el sprint. | Etapa 1: Análisis de requisitos (`requisitos.md`). |
+| | | Etapa 2: Planeación ágil del proyecto. |
+| | | Etapa 3: Diseño de la solución (`diseño.md`). |
+| | | S1-1: Crear el proyecto Express y la estructura de carpetas. |
+| | | S1-2: Preparar los datos de ejemplo en `/data`. |
+| | | S1-3: Desarrollar `GET /espacios` y `GET /espacios/:id`. |
+| | | S1-4: Desarrollar `POST /espacios`. |
+| | | S1-5: Desarrollar `GET /reservas` y `GET /reservas/:id`. |
+| | | S1-6: Desarrollar `POST /reservas`. |
+| | | S1-7: Validar los campos obligatorios de los espacios y las reservas. |
+| | | S1-8: Realizar las pruebas iniciales de las rutas de la API. |
+| | | S1-9: Documentar los avances y resultados en los archivos del proyecto. |
+
+### Resultado del Sprint 1
+
+Al finalizar el Sprint 1, el equipo completó las actividades previstas para la configuración inicial del proyecto, la organización de los requisitos, el diseño de la solución y el desarrollo de las rutas iniciales para administrar espacios y reservas.
+
+También se preparó la documentación correspondiente y se organizaron los casos de prueba para revisar el funcionamiento de la API. Las siguientes etapas permitirán continuar con las validaciones, las reglas de disponibilidad y las mejoras necesarias para completar el sistema.
 
 **Importante:** las etapas de documentación aparecen como terminadas en la planificación inicial. Esto no significa que todas las funcionalidades del código estén terminadas; las tareas de desarrollo deben moverse a «Hecho» solo después de comprobar que funcionan.
 
