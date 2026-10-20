@@ -109,4 +109,5 @@ Se toma como referencia una reserva existente con estos datos:
 
 **Importante:** los códigos HTTP indicados corresponden al resultado esperado de una creación de reserva. Si la operación consiste en editar una reserva, el código de respuesta exitosa puede ser `200 OK`, según lo definido para esa ruta de la API.
 
-**Navegación del proyecto:** [01. Análisis de requisitos](requisitos.md) · [03. Diseño](diseño.md)
+**Navegación del proyecto:** 
+[Introduccion](README.md) ·[01. Análisis de requisitos](requisitos.md) · [02. Planeación ágil](planeacion.md) · [03. Diseño](diseño.md) · [04. Pruebas](pruebas.md)
