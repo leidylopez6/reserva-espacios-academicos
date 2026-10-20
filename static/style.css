@@ -1,16 +1,963 @@
+/* =========================================================
+   SISTEMA DE RESERVA DE ESPACIOS ACADÉMICOS - UNIOC
+   Diseño institucional adaptable a PC, tabletas y celulares
+   ========================================================= */
+
+/* 1. COLORES Y VARIABLES GENERALES */
+:root {
+  --bg: #f5f6f8;
+  --card: #ffffff;
+  --ink: #263346;
+  --muted: #687589;
+  --line: #e1e5ee;
+
+  --brand: #123b68;
+  --brand-hover: #0c2b4d;
+  --brand-ink: #ffffff;
+
+  --accent: #ee9b2d;
+  --accent-soft: #fff1dc;
+
+  --ok: #137a4b;
+  --ok-bg: #e0f5ea;
+
+  --bad: #b3261e;
+  --bad-bg: #fde8e6;
+
+  --warn-bg: #fff4d6;
+
+  --radius: 14px;
+}
+
+/* 2. CONFIGURACIÓN GENERAL */
 * {
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
-  padding: 1rem;
-  font-family: system-ui, sans-serif;
-  color: black;
-  background-color: white;
+html {
+  min-height: 100%;
+  background: #f7f4ef;
+  scroll-behavior: smooth;
 }
 
-h1 {
-  font-weight: 800;
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink);
+
+  background-color: #f7f4ef;
+  background-image: linear-gradient(
+      rgba(250, 248, 245, 0.92),
+      rgba(250, 248, 245, 0.95)
+    ),
+    url('https://iescinoc.edu.co/wp-content/uploads/Sede-actual-Fase-1-4159x3119-2-scaled.jpg');
+
+  background-position: center, center;
+  background-size: cover, cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed, fixed;
+}
+
+/* 3. ENCABEZADO INSTITUCIONAL */
+header {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 12px clamp(16px, 4vw, 48px);
+  background: var(--brand);
+  color: #ffffff;
+  border-bottom: 4px solid var(--accent);
+}
+
+header h1 {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: normal;
+}
+
+header h1::before {
+  content: '';
+  display: block;
+  flex: 0 0 85px;
+  width: 75px;
+  height: 85px;
+  background-image: url('https://iescinoc.edu.co/wp-content/uploads/Logo-amarillo-blanco-UNIOC-scaled.png');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  border-radius: 0;
+}
+
+header p {
+  max-width: 1028px;
+  margin: 8px auto 0;
+  color: #e7edf6;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* 4. MENÚ DE NAVEGACIÓN */
+nav {
+  width: 100%;
+  max-width: 1120px;
+  margin: 24px auto 0;
+  padding: 0 clamp(14px, 3vw, 28px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+nav button {
+  min-height: 42px;
+  padding: 10px 16px;
+  border: 1px solid #dce2ea;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #344256;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  box-shadow: none;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+nav button:hover {
+  background: var(--accent-soft);
+  color: var(--brand);
+  border-color: var(--accent);
+}
+
+nav button[aria-selected='true'] {
+  background: var(--brand);
+  color: var(--brand-ink);
+  border-color: var(--brand);
+  font-weight: 600;
+  box-shadow: 0 3px 8px rgba(18, 59, 104, 0.16);
+}
+
+/* 5. CONTENIDO PRINCIPAL */
+main {
+  width: 100%;
+  max-width: 1120px;
+  margin: 28px auto 56px;
+  padding: 0 clamp(14px, 3vw, 28px);
+}
+
+section[hidden] {
+  display: none;
+}
+
+/* 6. TARJETAS GENERALES */
+.card {
+  min-width: 0;
+  padding: clamp(16px, 2.5vw, 26px);
+  margin-bottom: 22px;
+  border: 1px solid rgba(220, 225, 232, 0.95);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 5px 18px rgba(28, 45, 65, 0.055);
+}
+
+.card h2 {
+  margin: 0 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--brand);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.card h2::before {
+  content: '';
+  display: block;
+  flex: 0 0 4px;
+  width: 4px;
+  height: 20px;
+  border-radius: 99px;
+  background: var(--accent);
+}
+
+/* 7. FORMULARIOS Y FILTROS */
+form,
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: 16px;
+  align-items: end;
+}
+
+label {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+input,
+select {
+  width: 100%;
+  min-width: 0;
+  min-height: 43px;
+  padding: 10px 12px;
+  border: 1px solid #d5dce5;
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:hover,
+select:hover {
+  border-color: #b9c6d6;
+}
+
+input:focus,
+select:focus {
+  outline: 2px solid rgba(238, 155, 45, 0.55);
+  outline-offset: 1px;
+  border-color: var(--brand);
+}
+
+input::placeholder {
+  color: #98a2b3;
+}
+
+/* 8. BOTONES */
+.btn {
+  min-height: 42px;
+  padding: 10px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--brand);
+  border-radius: 8px;
+  background: var(--brand);
+  color: var(--brand-ink);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: none;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn:hover {
+  background: var(--brand-hover);
+  border-color: var(--brand-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(18, 59, 104, 0.14);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn:focus-visible,
+nav button:focus-visible {
+  outline: 3px solid rgba(238, 155, 45, 0.65);
+  outline-offset: 2px;
+}
+
+.btn.sec {
+  background: #ffffff;
+  color: #344256;
+  border-color: #dce2ea;
+  font-weight: 500;
+}
+
+.btn.sec:hover {
+  background: var(--accent-soft);
+  color: var(--brand);
+  border-color: var(--accent);
+}
+
+.btn.danger {
+  background: #ffffff;
+  color: var(--bad);
+  border-color: #e6b7b4;
+  font-weight: 500;
+}
+
+.btn.danger:hover {
+  background: var(--bad);
+  color: #ffffff;
+  border-color: var(--bad);
+}
+
+.btn.small {
+  min-height: 34px;
+  padding: 7px 11px;
+  font-size: 12px;
+  border-radius: 8px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* 9. CUADRÍCULA DE ESPACIOS */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 245px), 1fr));
+  gap: 20px;
+}
+
+.space {
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--card);
+  box-shadow: 0 4px 14px rgba(28, 45, 65, 0.055);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.space:hover {
+  transform: translateY(-2px);
+  border-color: #d3dce8;
+  box-shadow: 0 8px 20px rgba(28, 45, 65, 0.09);
+}
+
+.space .foto {
+  position: relative;
+  width: 100%;
+  height: clamp(130px, 17vw, 165px);
+  min-height: 0;
+  flex: 0 0 auto;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--brand), var(--accent));
+  font-size: 2rem;
+}
+
+.space .foto img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.space .body {
+  min-width: 0;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.space h3 {
+  margin: 0;
+  color: var(--brand);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.space .tipo {
+  width: fit-content;
+  max-width: 100%;
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--ok-bg);
+  color: var(--ok);
+  font-size: 12px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.space .desc {
+  margin-top: 4px;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.space .meta {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.space .actions {
+  margin-top: auto;
+  padding-top: 12px;
+  gap: 8px;
+}
+
+.space-image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: clamp(130px, 20vw, 180px);
+  margin-bottom: 14px;
+  border-radius: 9px;
+  object-fit: cover;
+  object-position: center;
+  background: #f1f5f9;
+}
+
+/* 10. TABLAS */
+.table-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: #ffffff;
+  box-shadow: 0 2px 5px rgba(28, 45, 65, 0.035);
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+th,
+td {
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+th {
+  background: #f0f3f7;
+  color: var(--brand);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+tbody tr {
+  transition: background 0.15s ease;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* 11. ESTADOS DE LAS RESERVAS */
+.badge {
+  display: inline-block;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.badge.activa {
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+.badge.activa::before {
+  content: '● ';
+  color: var(--ok);
+}
+
+.badge.cancelada {
+  background: var(--bad-bg);
+  color: var(--bad);
+}
+
+.empty {
+  padding: 12px 0;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* 12. BARRA GRÁFICA DE DISPONIBILIDAD */
+.bar {
+  position: relative;
+  width: 100%;
+  height: 38px;
+  margin: 12px 0 4px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--ok-bg);
+}
+
+.bar .seg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: var(--bad);
+  opacity: 0.85;
+}
+
+.scale {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.legend {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* 13. MENSAJES EMERGENTES */
+#toast {
+  position: fixed;
+  z-index: 1000;
+  bottom: 20px;
+  left: 50%;
+  width: max-content;
+  max-width: calc(100vw - 28px);
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: center;
+  overflow-wrap: anywhere;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+  transform: translateX(-50%);
+}
+
+#toast.ok {
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+#toast.err {
+  background: var(--bad-bg);
+  color: var(--bad);
+}
+
+#toast[hidden] {
+  display: none;
+}
+
+/* 14. AVISO DE EDICIÓN */
+.editing {
+  display: none;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--warn-bg);
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* 15. TARJETA DE DISPONIBILIDAD */
+.disp-card {
+  margin-top: 22px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--card);
+  box-shadow: 0 4px 16px rgba(28, 45, 65, 0.05);
+}
+
+.disp-header {
+  padding: clamp(15px, 2.5vw, 24px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.disp-identidad {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.disp-icono {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: var(--accent-soft);
+  color: var(--brand);
   font-size: 1.5rem;
+}
+
+.disp-header h3 {
+  margin: 0;
+  color: var(--brand);
+  font-size: 17px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.disp-subtitulo {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.disp-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--ok-bg);
+  color: var(--ok);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.disp-estado.ocupado {
+  background: var(--bad-bg);
+  color: var(--bad);
+}
+
+.disp-contenido {
+  padding: clamp(15px, 2.5vw, 24px);
+  border-top: 1px solid var(--line);
+}
+
+.disp-resumen {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 14px;
+  border-radius: 10px;
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+.disp-resumen.ocupado {
+  background: var(--warn-bg);
+  color: var(--ink);
+}
+
+.disp-resumen strong {
+  display: block;
+  margin-bottom: 3px;
+}
+
+.disp-resumen p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.disp-seccion-titulo {
+  margin-bottom: 8px;
+  color: var(--brand);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.disp-leyenda {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.disp-punto {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 5px;
+  border-radius: 50%;
+}
+
+.disp-punto.libre {
+  background: var(--ok);
+}
+
+.disp-punto.ocupado {
+  background: var(--bad);
+}
+
+.disp-acciones {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+/* 16. AJUSTES PARA TABLETAS Y CELULARES */
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll, scroll;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    margin-bottom: 18px;
+  }
+
+  .disp-header {
+    align-items: flex-start;
+  }
+}
+
+/* 17. AJUSTES PARA CELULARES */
+@media (max-width: 600px) {
+  header {
+    padding: 12px 16px;
+  }
+
+  header h1 {
+    gap: 12px;
+    font-size: 20px;
+  }
+
+  header h1::before {
+    flex-basis: 40px;
+    width: 40px;
+    height: 50px;
+  }
+
+  header p {
+    margin-top: 10px;
+    font-size: 13px;
+  }
+
+  nav {
+    margin-top: 18px;
+    padding: 0 14px;
+    gap: 8px;
+  }
+
+  nav button {
+    min-height: 40px;
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+
+  main {
+    margin-top: 20px;
+    margin-bottom: 36px;
+    padding: 0 14px;
+  }
+
+  .card {
+    padding: 17px;
+    margin-bottom: 17px;
+  }
+
+  .card h2 {
+    margin-bottom: 16px;
+    font-size: 17px;
+  }
+
+  form,
+  .filters {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 13px;
+  }
+
+  input,
+  select {
+    min-height: 44px;
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 17px;
+  }
+
+  .space .foto {
+    height: 175px;
+  }
+
+  .space .body {
+    padding: 16px;
+  }
+
+  .space-image {
+    height: 150px;
+  }
+
+  .actions {
+    gap: 8px;
+  }
+
+  .actions .btn {
+    max-width: 100%;
+  }
+
+  .disp-header,
+  .disp-contenido {
+    padding: 15px;
+  }
+
+  .disp-identidad {
+    min-width: 0;
+    align-items: flex-start;
+  }
+
+  .disp-header h3 {
+    font-size: 16px;
+  }
+
+  .disp-acciones {
+    justify-content: stretch;
+  }
+
+  .disp-acciones .btn {
+    width: 100%;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 520px;
+  }
+
+  #toast {
+    bottom: 12px;
+    max-width: calc(100vw - 24px);
+    padding: 11px 14px;
+    font-size: 13px;
+  }
+}
+
+/* 18. AJUSTES PARA CELULARES PEQUEÑOS */
+@media (max-width: 360px) {
+  header {
+    padding: 18px 12px;
+  }
+
+  header h1 {
+    gap: 9px;
+    font-size: 18px;
+  }
+
+  header h1::before {
+    flex-basis: 34px;
+    width: 34px;
+    height: 44px;
+  }
+
+  header p {
+    font-size: 12px;
+  }
+
+  nav {
+    padding: 0 10px;
+    gap: 6px;
+  }
+
+  nav button {
+    min-height: 38px;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  main {
+    padding: 0 10px;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  .card h2 {
+    font-size: 16px;
+  }
+
+  .space .foto {
+    height: 145px;
+  }
+
+  .space .body {
+    padding: 14px;
+  }
+
+  .btn {
+    font-size: 13px;
+  }
+
+  .disp-icono {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+    font-size: 1.25rem;
+  }
+}
+
+/* 19. RESPETO POR LA PREFERENCIA DE MENOS ANIMACIONES */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
