@@ -75,10 +75,10 @@ En este repositorio se puede consultar el código fuente y la documentación ela
 
 El proyecto se encuentra en desarrollo como parte del proceso de formación académica. Sus funcionalidades se construyen y revisan por etapas, con el propósito de cumplir los requisitos definidos y comprobar el comportamiento de la API.
 
-## 10. Repositorio
+## 10. Repositorio y Render
 
 Código fuente: [Reserva de Espacios Académicos en GitHub](https://github.com/leidylopez6/reserva-espacios-academicos.git)
-
+URL: https://reserva-espacios-academicos-1.onrender.com
 ---
 
 **Proyecto académico — 2026B**  
