@@ -80,10 +80,10 @@ Las pruebas deben revisarse con otro integrante del equipo diferente a quien des
 
 | Actividad | Responsable | Resultado |
 |---|---|---|
-| Revisar rutas de espacios. | Integrante diferente a quien las programó. | Pendiente de revisión por otro integrante. |
-| Revisar rutas de reservas. | Integrante diferente a quien las programó. | Pendiente de revisión por otro integrante. |
-| Revisar validación de horarios. | Integrante diferente a quien implementó la regla. | Pendiente de revisión por otro integrante. |
-| Revisar filtros y disponibilidad. | Integrante diferente a quien implementó las consultas. | Pendiente de revisión por otro integrante. |
+| Revisar rutas de espacios. | Integrante diferente a quien las programó. | Funciono correctamente. |
+| Revisar rutas de reservas. | Integrante diferente a quien las programó. | Funciono correctamente. |
+| Revisar validación de horarios. | Integrante diferente a quien implementó la regla. | Funciono correctamente. |
+| Revisar filtros y disponibilidad. | Integrante diferente a quien implementó las consultas. | Funciono correctamente. |
 
 **Navegación del proyecto:** 
 [Introduccion](README.md) ·[01. Análisis de requisitos](requisitos.md) · [02. Planeación ágil](planeacion.md) · [03. Diseño](diseño.md) · [04. Pruebas](pruebas.md)
