@@ -149,4 +149,5 @@ La cancelación de una reserva no elimina el registro. En su lugar, cambia su es
 
 ---
 
-[02 Planeación ágil](planeacion.md) [04. Pruebas](pruebas.md)
+**Navegación del proyecto:** 
+[Introduccion](README.md) ·[01. Análisis de requisitos](requisitos.md) · [02. Planeación ágil](planeacion.md) · [03. Diseño](diseño.md) · [04. Pruebas](pruebas.md)
