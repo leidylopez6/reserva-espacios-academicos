@@ -1,4 +1,4 @@
-# Etapa 03 · Semana 1 · Diseño
+# 3. Diseño
 
 ## 1. Modelo de datos
 
