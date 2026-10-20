@@ -1,4 +1,4 @@
-# Etapa 05 · Semanas 3 y 4 · Pruebas
+# 5. Pruebas
 
 ## 1. Objetivo
 
@@ -101,3 +101,6 @@ Las pruebas manuales realizadas sobre los espacios permitieron comprobar la cons
 Los casos restantes de reservas, solapamiento, filtros y disponibilidad se documentaron con los resultados esperados como supuestos de trabajo, pero todavía requieren verificación manual.
 
 **Estado actual:** pruebas de espacios E01–E08 aprobadas con evidencia de la terminal. E09 y las pruebas de reservas, solapamiento, filtros y disponibilidad quedan documentadas como supuestos pendientes de confirmar. La revisión por otro integrante del equipo también está pendiente.
+
+**Navegación del proyecto:** 
+[Introduccion](README.md) ·[01. Análisis de requisitos](requisitos.md) · [02. Planeación ágil](planeacion.md) · [03. Diseño](diseño.md) · [04. Pruebas](pruebas.md)
