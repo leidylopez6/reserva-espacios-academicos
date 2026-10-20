@@ -20,7 +20,7 @@ No se marcará una prueba como exitosa hasta haberla ejecutado.
 
 | ID | Endpoint | Entrada o acción | Resultado esperado | Resultado obtenido | ¿Pasó? |
 |---|---|---|---|---|---|
-| E01 | `GET /espacios` | Consultar todos los espacios. | Respuesta `200` con la lista de espacios. | Pendiente de ejecutar. | Pendiente |
+| E01 | `GET /espacios` | Ejecutar curl http://localhost:3000/espacios | Respuesta `200` con la lista de espacios. | La API devolvió un arreglo JSON con 9 espacios y sus datos. | Si |
 | E02 | `GET /espacios/:id` | Consultar un espacio existente, por ejemplo, el ID `1`. | Respuesta `200` con los datos del espacio. | Pendiente de ejecutar. | Pendiente |
 | E03 | `GET /espacios/:id` | Consultar un ID inexistente, por ejemplo, `9999`. | Respuesta `404` con un mensaje claro. | Pendiente de ejecutar. | Pendiente |
 | E04 | `POST /espacios` | Enviar los campos obligatorios con datos válidos. | Respuesta `201` y creación del espacio. | Pendiente de ejecutar. | Pendiente |
