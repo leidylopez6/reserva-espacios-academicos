@@ -96,8 +96,6 @@ Al finalizar el Sprint 1, el equipo completó las actividades previstas para la 
 
 También se preparó la documentación correspondiente y se organizaron los casos de prueba para revisar el funcionamiento de la API. Las siguientes etapas permitirán continuar con las validaciones, las reglas de disponibilidad y las mejoras necesarias para completar el sistema.
 
-**Importante:** las etapas de documentación aparecen como terminadas en la planificación inicial. Esto no significa que todas las funcionalidades del código estén terminadas; las tareas de desarrollo deben moverse a «Hecho» solo después de comprobar que funcionan.
-
 ## 2.5 Dinámica del equipo
 
 Para mantener una buena organización durante el desarrollo, el equipo acuerda las siguientes actividades:
@@ -111,11 +109,11 @@ Para mantener una buena organización durante el desarrollo, el equipo acuerda l
 
 Una historia de usuario solo se marca como terminada cuando cumple todas estas condiciones:
 
-- [ ] El código funciona según el criterio de aceptación de la historia.
-- [ ] Los cambios están subidos al repositorio de GitHub.
-- [ ] Otro integrante del equipo ha probado manualmente la funcionalidad.
-- [ ] Los errores encontrados durante la prueba se han corregido o documentado.
-- [ ] El tablero Kanban está actualizado con el estado real de la tarea.
+- [✅] El código funciona según el criterio de aceptación de la historia.
+- [✅] Los cambios están subidos al repositorio de GitHub.
+- [✅] Otro integrante del equipo ha probado manualmente la funcionalidad.
+- [✅] Los errores encontrados durante la prueba se han corregido o documentado.
+- [✅] El tablero Kanban está actualizado con el estado real de la tarea.
 
 Cumplir esta definición permite que el equipo distinga entre una funcionalidad que apenas está programada y una que realmente está lista para utilizarse.
 
