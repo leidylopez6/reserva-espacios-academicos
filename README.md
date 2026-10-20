@@ -84,3 +84,6 @@ Código fuente: [Reserva de Espacios Académicos en GitHub](https://github.com/l
 **Proyecto académico — 2026B**  
 Técnico Profesional en Soporte y Operación de Sistemas Informáticos  
 Institución Universitaria Oriente de Caldas (UNIOC)
+
+**Navegación del proyecto:** 
+[Introduccion](README.md) ·[01. Análisis de requisitos](requisitos.md) · [02. Planeación ágil](planeacion.md) · [03. Diseño](diseño.md) · [04. Pruebas](pruebas.md)
