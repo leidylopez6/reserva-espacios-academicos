@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/static/style.css" />
+    <title>Reserva de espacios académicos</title>
+  </head>
+  <body>
+    <header>
+      <h1>Reserva de espacios académicos</h1>
+      <p>
+        Consulta espacios, revisa su disponibilidad y gestiona tus reservas.
+      </p>
+    </header>
+
+    <nav role="tablist">
+      <button role="tab" data-tab="reservas" aria-selected="true">
+        Reservas
+      </button>
+      <button role="tab" data-tab="espacios" aria-selected="false">
+        Espacios
+      </button>
+      <button role="tab" data-tab="disponibilidad" aria-selected="false">
+        Disponibilidad
+      </button>
+    </nav>
+
+    <main>
+      <!-- RESERVAS -->
+      <section id="tab-reservas">
+        <div class="card">
+          <h2 id="reserva-titulo">Nueva reserva</h2>
+          <div class="editing" id="reserva-editing"></div>
+          <form id="form-reserva">
+            <label
+              >Espacio
+              <select id="r-espacio" required></select
+            ></label>
+            <label
+              >Solicitante
+              <input
+                id="r-solicitante"
+                placeholder="Nombre de quien reserva"
+                required
+            /></label>
+            <label>Fecha <input id="r-fecha" type="date" required /></label>
+            <label
+              >Hora inicio <input id="r-inicio" type="time" required
+            /></label>
+            <label>Hora fin <input id="r-fin" type="time" required /></label>
+            <div class="actions">
+              <button class="btn" type="submit" id="r-submit">Reservar</button>
+              <button class="btn sec" type="button" id="r-cancel-edit" hidden>
+                Cancelar edición
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2>Listado de reservas</h2>
+          <div class="filters">
+            <label
+              >Espacio
+              <select id="f-espacio"></select
+            ></label>
+            <label
+              >Solicitante <input id="f-solicitante" placeholder="Ej.: Ana"
+            /></label>
+            <label
+              >Estado
+              <select id="f-estado">
+                <option value="">Todos</option>
+                <option value="activa">Activas</option>
+                <option value="cancelada">Canceladas</option>
+              </select>
+            </label>
+            <div class="actions">
+              <button class="btn" id="f-buscar" type="button">Filtrar</button>
+              <button class="btn sec" id="f-limpiar" type="button">
+                Limpiar
+              </button>
+            </div>
+          </div>
+          <div class="table-wrap" style="margin-top: 14px">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Espacio</th>
+                  <th>Solicitante</th>
+                  <th>Fecha</th>
+                  <th>Horario</th>
+                  <th>Estado</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="tabla-reservas"></tbody>
+            </table>
+          </div>
+          <div class="empty" id="reservas-vacio" hidden>
+            No hay reservas para mostrar.
+          </div>
+        </div>
+      </section>
+
+      <!-- ESPACIOS -->
+      <section id="tab-espacios" hidden>
+        <div class="card">
+          <h2 id="espacio-titulo">Nuevo espacio</h2>
+          <div class="editing" id="espacio-editing"></div>
+          <form id="form-espacio">
+            <label
+              >Nombre
+              <input
+                id="e-nombre"
+                placeholder="Laboratorio de Sistemas"
+                required
+            /></label>
+            <label
+              >Ubicación
+              <input id="e-ubicacion" placeholder="Bloque B, piso 2" required
+            /></label>
+            <label
+              >Capacidad
+              <input id="e-capacidad" type="number" min="1" step="1" required
+            /></label>
+            <label
+              >Tipo <input id="e-tipo" placeholder="Eventos / reuniones"
+            /></label>
+            <label
+              >Descripción
+              <input
+                id="e-descripcion"
+                placeholder="Breve descripción del espacio"
+            /></label>
+            <label
+              >Imagen (ruta o URL)
+              <input id="e-imagen" placeholder="/img/laboratorio.jpg"
+            /></label>
+            <div class="actions">
+              <button class="btn" type="submit" id="e-submit">
+                Crear espacio
+              </button>
+              <button class="btn sec" type="button" id="e-cancel-edit" hidden>
+                Cancelar edición
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="card">
+          <h2>Espacios disponibles</h2>
+          <div class="grid" id="lista-espacios"></div>
+        </div>
+      </section>
+
+      <!-- DISPONIBILIDAD -->
+      <section id="tab-disponibilidad" hidden>
+        <div class="card">
+          <h2>Consultar disponibilidad</h2>
+          <form id="form-disp">
+            <label
+              >Espacio
+              <select id="d-espacio" required></select
+            ></label>
+            <label>Fecha <input id="d-fecha" type="date" required /></label>
+            <div class="actions">
+              <button class="btn" type="submit">Consultar</button>
+            </div>
+          </form>
+          <div id="disp-resultado" style="margin-top: 16px"></div>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast" hidden></div>
+
+    <script>
+      const $ = (s) => document.querySelector(s);
+      let espacios = [];
+
+      /* ---------- utilidades ---------- */
+      function esc(t) {
+        return String(t)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+      let toastTimer;
+      function aviso(msg, tipo = 'ok') {
+        const t = $('#toast');
+        t.textContent = msg;
+        t.className = tipo;
+        t.hidden = false;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => (t.hidden = true), 3500);
+      }
+      async function api(ruta, opciones = {}) {
+        const r = await fetch(ruta, {
+          headers: { 'Content-Type': 'application/json' },
+          ...opciones,
+        });
+        const texto = await r.text();
+        let datos;
+        try {
+          datos = JSON.parse(texto);
+        } catch (e) {
+          throw new Error(
+            'El servidor no respondió JSON (código ' +
+              r.status +
+              '). Reinicia el servidor con npm start y recarga la página.'
+          );
+        }
+        if (!r.ok)
+          throw new Error((datos && datos.error) || 'Error ' + r.status);
+        return datos;
+      }
+      function hoy() {
+        const d = new Date();
+        const p = (n) => String(n).padStart(2, '0');
+        return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+      }
+      function nombreEspacio(id) {
+        const e = espacios.find((x) => x.id === id);
+        return e ? e.nombre : 'Espacio #' + id;
+      }
+
+      /* ---------- pestañas ---------- */
+      document.querySelectorAll('nav button').forEach((b) => {
+        b.addEventListener('click', () => {
+          document
+            .querySelectorAll('nav button')
+            .forEach((x) => x.setAttribute('aria-selected', x === b));
+          document
+            .querySelectorAll('main > section')
+            .forEach((s) => (s.hidden = s.id !== 'tab-' + b.dataset.tab));
+        });
+      });
+
+      /* ---------- espacios ---------- */
+      async function cargarEspacios() {
+        espacios = await api('/espacios');
+
+        const opciones = espacios
+          .map((e) => `<option value="${e.id}">${esc(e.nombre)}</option>`)
+          .join('');
+        const previos = {
+          r: $('#r-espacio').value,
+          d: $('#d-espacio').value,
+          f: $('#f-espacio').value,
+        };
+        $('#r-espacio').innerHTML = opciones;
+        $('#d-espacio').innerHTML = opciones;
+        $('#f-espacio').innerHTML =
+          '<option value="">Todos</option>' + opciones;
+        if (previos.r) $('#r-espacio').value = previos.r;
+        if (previos.d) $('#d-espacio').value = previos.d;
+        if (previos.f) $('#f-espacio').value = previos.f;
+
+        $('#lista-espacios').innerHTML = espacios.length
+          ? espacios
+              .map(
+                (e) => `
+      <div class="space">
+        <div class="foto">🏫${
+          e.imagen
+            ? `<img src="${esc(e.imagen)}" alt="${esc(
+                e.nombre
+              )}" loading="lazy" onerror="this.remove()">`
+            : ''
+        }</div>
+        <div class="body">
+          <h3>${esc(e.nombre)}</h3>
+          ${e.tipo ? `<div><span class="tipo">${esc(e.tipo)}</span></div>` : ''}
+          <div class="meta">📍 ${esc(e.ubicacion)}</div>
+          <div class="meta">👥 Capacidad: ${esc(e.capacidad)}</div>
+          ${
+            e.descripcion ? `<div class="desc">${esc(e.descripcion)}</div>` : ''
+          }
+          <div class="actions">
+            <button class="btn sec small" data-editar-espacio="${
+              e.id
+            }">Editar</button>
+            <button class="btn danger small" data-eliminar-espacio="${
+              e.id
+            }">Eliminar</button>
+          </div>
+        </div>
+      </div>`
+              )
+              .join('')
+          : '<div class="empty">No hay espacios registrados.</div>';
+      }
+
+      function salirEdicionEspacio() {
+        $('#form-espacio').reset();
+        $('#form-espacio').dataset.id = '';
+        $('#espacio-titulo').textContent = 'Nuevo espacio';
+        $('#e-submit').textContent = 'Crear espacio';
+        $('#e-cancel-edit').hidden = true;
+        $('#espacio-editing').style.display = 'none';
+      }
+
+      $('#form-espacio').addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        const id = ev.target.dataset.id;
+        const cuerpo = {
+          nombre: $('#e-nombre').value,
+          ubicacion: $('#e-ubicacion').value,
+          capacidad: Number($('#e-capacidad').value),
+          tipo: $('#e-tipo').value,
+          descripcion: $('#e-descripcion').value,
+          imagen: $('#e-imagen').value,
+        };
+        try {
+          if (id) {
+            await api('/espacios/' + id, {
+              method: 'PUT',
+              body: JSON.stringify(cuerpo),
+            });
+            aviso('Espacio actualizado');
+          } else {
+            await api('/espacios', {
+              method: 'POST',
+              body: JSON.stringify(cuerpo),
+            });
+            aviso('Espacio creado');
+          }
+          salirEdicionEspacio();
+          await cargarEspacios();
+          await cargarReservas();
+        } catch (e) {
+          aviso(e.message, 'err');
+        }
+      });
+      $('#e-cancel-edit').addEventListener('click', salirEdicionEspacio);
+
+      $('#lista-espacios').addEventListener('click', async (ev) => {
+        const ed = ev.target.dataset.editarEspacio;
+        const el = ev.target.dataset.eliminarEspacio;
+        if (ed) {
+          const e = espacios.find((x) => x.id === Number(ed));
+          $('#e-nombre').value = e.nombre;
+          $('#e-ubicacion').value = e.ubicacion;
+          $('#e-capacidad').value = e.capacidad;
+          $('#e-tipo').value = e.tipo || '';
+          $('#e-descripcion').value = e.descripcion || '';
+          $('#e-imagen').value = e.imagen || '';
+          $('#form-espacio').dataset.id = e.id;
+          $('#espacio-titulo').textContent = 'Editar espacio';
+          $('#e-submit').textContent = 'Guardar cambios';
+          $('#e-cancel-edit').hidden = false;
+          $('#espacio-editing').textContent = 'Editando: ' + e.nombre;
+          $('#espacio-editing').style.display = 'block';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        if (el && confirm('¿Eliminar este espacio?')) {
+          try {
+            await api('/espacios/' + el, { method: 'DELETE' });
+            aviso('Espacio eliminado');
+            await cargarEspacios();
+          } catch (e) {
+            aviso(e.message, 'err');
+          }
+        }
+      });
+
+      /* ---------- reservas ---------- */
+      let reservasCache = [];
+
+      async function cargarReservas() {
+        const p = new URLSearchParams();
+        if ($('#f-espacio').value) p.set('espacioId', $('#f-espacio').value);
+        if ($('#f-solicitante').value.trim())
+          p.set('solicitante', $('#f-solicitante').value.trim());
+        if ($('#f-estado').value) p.set('estado', $('#f-estado').value);
+
+        try {
+          const respuesta = await api(
+            '/reservas' + (p.toString() ? '?' + p : '')
+          );
+          if (!Array.isArray(respuesta)) {
+            throw new Error(
+              'GET /reservas no devolvió una lista. Revisa reservas.controller.js (función listar).'
+            );
+          }
+          reservasCache = respuesta;
+        } catch (e) {
+          return aviso(e.message, 'err');
+        }
+
+        $('#reservas-vacio').hidden = reservasCache.length > 0;
+        $('#tabla-reservas').innerHTML = reservasCache
+          .map(
+            (r) => `
+    <tr>
+      <td>${r.id}</td>
+      <td>${esc(nombreEspacio(r.espacioId))}</td>
+      <td>${esc(r.solicitante)}</td>
+      <td>${esc(r.fecha)}</td>
+      <td>${esc(r.horaInicio)} – ${esc(r.horaFin)}</td>
+      <td><span class="badge ${esc(r.estado)}">${esc(r.estado)}</span></td>
+      <td>${
+        r.estado === 'activa'
+          ? `
+        <div class="actions">
+          <button class="btn sec small" data-editar-reserva="${r.id}">Editar</button>
+          <button class="btn danger small" data-cancelar-reserva="${r.id}">Cancelar</button>
+        </div>`
+          : ''
+      }</td>
+    </tr>`
+          )
+          .join('');
+      }
+
+      function salirEdicionReserva() {
+        $('#form-reserva').reset();
+        $('#form-reserva').dataset.id = '';
+        $('#r-fecha').value = hoy();
+        $('#reserva-titulo').textContent = 'Nueva reserva';
+        $('#r-submit').textContent = 'Reservar';
+        $('#r-cancel-edit').hidden = true;
+        $('#reserva-editing').style.display = 'none';
+      }
+
+      $('#form-reserva').addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        const id = ev.target.dataset.id;
+        const cuerpo = {
+          espacioId: Number($('#r-espacio').value),
+          solicitante: $('#r-solicitante').value,
+          fecha: $('#r-fecha').value,
+          horaInicio: $('#r-inicio').value,
+          horaFin: $('#r-fin').value,
+        };
+        try {
+          if (id) {
+            await api('/reservas/' + id, {
+              method: 'PUT',
+              body: JSON.stringify(cuerpo),
+            });
+            aviso('Reserva actualizada');
+          } else {
+            await api('/reservas', {
+              method: 'POST',
+              body: JSON.stringify(cuerpo),
+            });
+            aviso('Reserva creada');
+          }
+          salirEdicionReserva();
+          await cargarReservas();
+        } catch (e) {
+          aviso(e.message, 'err');
+        }
+      });
+      $('#r-cancel-edit').addEventListener('click', salirEdicionReserva);
+
+      $('#tabla-reservas').addEventListener('click', async (ev) => {
+        const ed = ev.target.dataset.editarReserva;
+        const ca = ev.target.dataset.cancelarReserva;
+        if (ed) {
+          const r = reservasCache.find((x) => x.id === Number(ed));
+          $('#r-espacio').value = r.espacioId;
+          $('#r-solicitante').value = r.solicitante;
+          $('#r-fecha').value = r.fecha;
+          $('#r-inicio').value = r.horaInicio;
+          $('#r-fin').value = r.horaFin;
+          $('#form-reserva').dataset.id = r.id;
+          $('#reserva-titulo').textContent = 'Editar reserva #' + r.id;
+          $('#r-submit').textContent = 'Guardar cambios';
+          $('#r-cancel-edit').hidden = false;
+          $('#reserva-editing').textContent = 'Editando la reserva #' + r.id;
+          $('#reserva-editing').style.display = 'block';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        if (
+          ca &&
+          confirm('¿Cancelar esta reserva? El espacio quedará libre.')
+        ) {
+          try {
+            await api('/reservas/' + ca, { method: 'DELETE' });
+            aviso('Reserva cancelada');
+            await cargarReservas();
+          } catch (e) {
+            aviso(e.message, 'err');
+          }
+        }
+      });
+
+      $('#f-buscar').addEventListener('click', cargarReservas);
+      $('#f-limpiar').addEventListener('click', () => {
+        $('#f-espacio').value = '';
+        $('#f-solicitante').value = '';
+        $('#f-estado').value = '';
+        cargarReservas();
+      });
+
+      /* ---------- disponibilidad ---------- */
+      const INI = 6 * 60,
+        FIN = 22 * 60;
+
+      const aMin = (h) => Number(h.slice(0, 2)) * 60 + Number(h.slice(3, 5));
+
+      function fechaBonita(fecha) {
+        const [anio, mes, dia] = fecha.split('-').map(Number);
+        const fechaLocal = new Date(anio, mes - 1, dia);
+
+        return fechaLocal.toLocaleDateString('es-CO', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        });
+      }
+
+      function escaparFecha(fecha) {
+        return esc(fechaBonita(fecha));
+      }
+
+      $('#form-disp').addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+
+        const id = $('#d-espacio').value;
+        const fecha = $('#d-fecha').value;
+        const out = $('#disp-resultado');
+        const espacio = espacios.find((e) => e.id === Number(id));
+
+        if (!id || !fecha || !espacio) {
+          out.innerHTML = '';
+          aviso('Selecciona un espacio y una fecha.', 'err');
+          return;
+        }
+
+        out.innerHTML =
+          '<div class="empty">Consultando disponibilidad...</div>';
+
+        try {
+          const d = await api(
+            `/espacios/${id}/disponibilidad?fecha=${encodeURIComponent(fecha)}`
+          );
+
+          const ocupados = Array.isArray(d.ocupados) ? d.ocupados : [];
+
+          const tieneOcupaciones = ocupados.some(
+            (o) => aMin(o.horaFin) > INI && aMin(o.horaInicio) < FIN
+          );
+
+          const estado = tieneOcupaciones
+            ? 'Disponibilidad parcial'
+            : 'Disponible todo el día';
+
+          const resumen = tieneOcupaciones
+            ? 'Consulta los horarios para identificar los períodos ocupados y libres.'
+            : 'No hay reservas registradas para esta fecha.';
+
+          const segmentos = ocupados
+            .map((o) => {
+              const a = Math.max(aMin(o.horaInicio), INI);
+              const b = Math.min(aMin(o.horaFin), FIN);
+
+              if (b <= a) return '';
+
+              const left = ((a - INI) / (FIN - INI)) * 100;
+              const width = ((b - a) / (FIN - INI)) * 100;
+
+              return `
+                <div class="seg"
+                  style="left:${left}%;width:${width}%"
+                  title="Ocupado: ${esc(o.horaInicio)} – ${esc(o.horaFin)}">
+                </div>`;
+            })
+            .join('');
+
+          out.innerHTML = `
+            <article class="disp-card">
+              <div class="disp-header">
+                <div class="disp-identidad">
+                <div class="space">
+                  <img
+                    src="${espacio.imagen}"
+                    alt="Imagen de ${espacio.nombre}"
+                    class="space-image"
+                  >
+                  <h3>${espacio.nombre}</h3>
+                  <p>📍 ${espacio.ubicacion}</p>
+                </div>
+                  </div>
+                </div>
+
+                <span class="disp-estado ${tieneOcupaciones ? 'ocupado' : ''}">
+                  ${tieneOcupaciones ? '●' : '✓'}
+                  ${estado}
+                </span>
+              </div>
+
+              <div class="disp-contenido">
+                <div class="disp-seccion-titulo">
+                  📅 ${escaparFecha(fecha)}
+                </div>
+
+                <div class="disp-resumen ${tieneOcupaciones ? 'ocupado' : ''}">
+                  <span>${tieneOcupaciones ? '📋' : '✓'}</span>
+                  <div>
+                    <strong>${
+                      tieneOcupaciones
+                        ? 'Hay horarios ocupados'
+                        : 'Disponible todo el día'
+                    }</strong>
+                    <p>${resumen}</p>
+                  </div>
+                </div>
+
+                <div class="disp-seccion-titulo">
+                  Horario del espacio
+                </div>
+
+                <div class="bar">${segmentos}</div>
+
+                <div class="scale">
+                  <span>6:00 a. m.</span>
+                  <span>10:00 a. m.</span>
+                  <span>2:00 p. m.</span>
+                  <span>6:00 p. m.</span>
+                  <span>10:00 p. m.</span>
+                </div>
+
+                <div class="disp-leyenda">
+                  <span>
+                    <span class="disp-punto libre"></span>
+                    Libre
+                  </span>
+                  <span>
+                    <span class="disp-punto ocupado"></span>
+                    Ocupado
+                  </span>
+                </div>
+
+                ${
+                  tieneOcupaciones
+                    ? `
+                      <div class="table-wrap" style="margin-top:18px">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Reserva</th>
+                              <th>Hora de inicio</th>
+                              <th>Hora de fin</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            ${ocupados
+                              .map(
+                                (o) => `
+                              <tr>
+                                <td>#${esc(o.reservaId)}</td>
+                                <td>${esc(o.horaInicio)}</td>
+                                <td>${esc(o.horaFin)}</td>
+                              </tr>
+                            `
+                              )
+                              .join('')}
+                          </tbody>
+                        </table>
+                      </div>
+                    `
+                    : ''
+                }
+
+                <div class="disp-acciones">
+                  <button class="btn" type="button"
+                    data-reservar-espacio="${esc(espacio.id)}"
+                    data-reservar-fecha="${esc(fecha)}">
+                    Reservar espacio
+                  </button>
+                </div>
+              </div>
+            </article>`;
+        } catch (e) {
+          out.innerHTML = '';
+          aviso(e.message, 'err');
+        }
+      });
+
+      $('#disp-resultado').addEventListener('click', (ev) => {
+        const boton = ev.target.closest('[data-reservar-espacio]');
+        if (!boton) return;
+
+        const id = boton.dataset.reservarEspacio;
+        const fecha = boton.dataset.reservarFecha;
+
+        $('#r-espacio').value = id;
+        $('#r-fecha').value = fecha;
+
+        document.querySelector('[data-tab="reservas"]').click();
+
+        $('#r-solicitante').focus();
+        aviso('Completa el nombre y el horario para continuar.');
+      });
+
+      /* ---------- inicio ---------- */
+      (async function iniciar() {
+        $('#r-fecha').value = hoy();
+        $('#d-fecha').value = hoy();
+        try {
+          await cargarEspacios();
+          await cargarReservas();
+        } catch (e) {
+          aviso('No se pudo conectar con la API: ' + e.message, 'err');
+        }
+      })();
+    </script>
+  </body>
+</html>
