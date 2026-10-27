@@ -91,7 +91,7 @@ Donde:
 
 Se toma como referencia una reserva existente con estos datos:
 
-- **Espacio:** Sala 1
+- **Espacio:** Auditorio
 - **Fecha:** 2026-10-15
 - **Horario:** 10:00–11:00
 - **Estado:** activa
